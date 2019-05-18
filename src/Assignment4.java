@@ -57,31 +57,42 @@ public class Assignment4 extends Application {
 
     private void initGameLoop() {
         AtomicLong previousFrameTimestamp = new AtomicLong();
-        previousFrameTimestamp.set(new Date().getTime() * 1000000);
+        previousFrameTimestamp.set(System.nanoTime());
         AnimationTimer animationTimer = new AnimationTimer() {
             @Override
             public void handle(long now) {
                 getGame().render();
                 Util.fillStrokeText(mApplication, mGame.getGraphicsContext(),
-                        String.format("FPS: %.1f", mGame.getFPS(now, previousFrameTimestamp.get())), Constants.SCREEN_WIDTH - 200, 32, 0, 32);
+                        String.format("FPS: %.1f", mGame.getFPS(now, previousFrameTimestamp.get())), Constants.SCREEN_WIDTH - 170, 32, 0, 32);
                 previousFrameTimestamp.set(now);
             }
         };
         getGame().setAnimationTimer(animationTimer);
+
     }
 
     private void initEventHandlers() {
         getGameScene().addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
             switch (key.getCode()) {
                 case ENTER:
-                    if (getGame().isGameInitialized() || !getGame().isPlaying()) {
-                        getGame().startGame();
+                    switch (getGame().getState()) {
+                        case IDLE:
+                            getGame().startGame();
+                            break;
+                        case LOST:
+                            getGame().restart();
+                            break;
                     }
                     break;
                 case ESCAPE:
-                    if (getGame().isPlaying()) {
-                        getGame().stopGame();
-                    } else getGame().startGame();
+                    switch (getGame().getState()){
+                        case PAUSED:
+                            getGame().setState(Game.GameState.PLAYING);
+                            break;
+                        case PLAYING:
+                            getGame().setState(Game.GameState.PAUSED);
+                            break;
+                    }
             }
         });
     }

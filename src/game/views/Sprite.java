@@ -6,6 +6,7 @@ import javafx.scene.image.Image;
 import physics.Vector2D;
 
 public abstract class Sprite {
+
     private Image mImage;
     private Vector2D mPosition;
     private Vector2D mVelocity;
@@ -16,8 +17,8 @@ public abstract class Sprite {
         mImage = image;
         mPosition = position;
         mVelocity = velocity;
-        this.mWidth = width;
-        this.mHeight = height;
+        mWidth = width;
+        mHeight = height;
     }
 
     public abstract void update();
@@ -75,9 +76,10 @@ public abstract class Sprite {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Car) {
-            return ((Car) obj).getPosition().equals(getPosition());
+        if (obj instanceof Sprite) {
+            return ((Sprite) obj).getPosition().equals(getPosition());
         }
         return false;
     }
+
 }

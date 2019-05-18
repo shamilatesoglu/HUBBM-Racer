@@ -8,6 +8,8 @@ import util.Constants;
 
 public class Car extends Sprite {
 
+    private boolean mHasFallenBehind;
+
     public Car(String url, Vector2D position) {
         super(new Image(url), position, new Vector2D(0, 5), 78, 128);
     }
@@ -31,4 +33,11 @@ public class Car extends Sprite {
         return car.getPosition().getY() - getPosition().getY() < 0;
     }
 
+    public boolean hasAlreadyFallenBehind() {
+        return mHasFallenBehind;
+    }
+
+    public void setHasAlreadyFallenBehind(boolean b) {
+        mHasFallenBehind = b;
+    }
 }

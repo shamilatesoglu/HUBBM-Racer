@@ -16,11 +16,13 @@ import util.Constants;
 import util.Util;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Game {
 
-    enum GameState {
-        PLAYING, PAUSED, LOST, INITIALIZED
+    public enum GameState {
+        PLAYING, PAUSED, LOST, IDLE
     }
 
     private Application mApplication;
@@ -35,11 +37,8 @@ public class Game {
 
     private ArrayList<Car> mNPCCars;
 
-    private boolean mGameInitialized;
-
-    private boolean mPlaying;
-
     private int mScore;
+    private int mLevel = 1;
 
     private AnimationTimer mAnimationTimer;
 
@@ -52,7 +51,7 @@ public class Game {
         initPrimaryCar();
         initEventHandlers();
         initOtherCars();
-        mState = GameState.INITIALIZED;
+        mState = GameState.IDLE;
     }
 
     private void initSounds() {
@@ -110,7 +109,18 @@ public class Game {
     }
 
     public void startGame() {
+        setState(GameState.PLAYING);
+    }
 
+    public void restart() {
+        mSprites.clear();
+        mNPCCars.clear();
+        initRoad();
+        initPrimaryCar();
+        initOtherCars();
+        setScore(0);
+        setLevel(1);
+        setState(GameState.PLAYING);
     }
 
     private void initOtherCars() {
@@ -146,6 +156,7 @@ public class Game {
 
     public void render() {
         clearScr();
+        mSprites.forEach(sprite -> sprite.render(getGraphicsContext()));
         switch (getState()) {
             case PLAYING:
                 update();
@@ -158,42 +169,50 @@ public class Game {
             case LOST:
                 showMenu();
                 break;
-            case INITIALIZED:
+            case IDLE:
                 update();
+                showMenu();
                 break;
         }
     }
 
-    public void stopGame() {
-        setPlaying(false);
-        setGameInitialized(false);
-        //mAnimationTimer.stop();
-    }
-
     private void renderScoreBoard() {
         Util.fillStrokeText(getApplication(), getGraphicsContext(), String.format("Score: %d", getScore()), 10, 32, 0, 32);
+        Util.fillStrokeText(getApplication(), getGraphicsContext(), String.format("Level: %d", getLevel()), 10, 64, 0, 32);
     }
 
     private void update() {
-        for (Sprite sprite : mSprites) {
-            if (sprite instanceof Car && !(sprite instanceof RedCar)) {
-                Car car = (Car) sprite;
-                if (car.isOutOfScreen()) {
-                    setNewPositionForCar(car);
+        switch (getState()) {
+            case IDLE:
+                for (Sprite sprite : mSprites) {
+                    if (sprite instanceof Road || sprite instanceof RedCar) {
+                        sprite.update();
+                    }
                 }
-                if (car.isBehind(mRedCar)) {
-                    car.setImage(Util.getImage(getApplication(), "car_green.png"));
-                    incrementScore();
+                break;
+            case PLAYING:
+                for (Sprite sprite : mSprites) {
+                    if (sprite instanceof Car && !(sprite instanceof RedCar)) {
+                        Car car = (Car) sprite;
+                        if (car.isOutOfScreen()) {
+                            setNewPositionForCar(car);
+                        }
+                        if (!car.hasAlreadyFallenBehind() && car.isBehind(mRedCar)) {
+                            car.setImage(Util.getImage(getApplication(), "car_green.png"));
+                            incrementScore();
+                            car.setHasAlreadyFallenBehind(true);
+                        }
+                        if (mRedCar.intersects(car)) {
+                            mRedCar.setImage(Util.getImage(getApplication(), "car_totaled.png"));
+                            car.setImage(Util.getImage(getApplication(), "car_totaled.png"));
+                            setState(GameState.LOST);
+                        }
+                    }
+                    sprite.update();
                 }
-                if (mRedCar.intersects(car)) {
-                    mRedCar.setImage(Util.getImage(getApplication(), "car_totaled.png"));
-                    car.setImage(Util.getImage(getApplication(), "car_totaled.png"));
-                    stopGame();
-                }
-            }
-            sprite.update();
-            sprite.render(getGraphicsContext());
+                break;
         }
+
     }
 
     private void setNewPositionForCar(Car car) {
@@ -215,6 +234,8 @@ public class Game {
                     }
             }
         }
+
+        car.setHasAlreadyFallenBehind(false);
     }
 
     public void setGraphicsContext(GraphicsContext graphicsContext) {
@@ -223,22 +244,6 @@ public class Game {
 
     public Application getApplication() {
         return mApplication;
-    }
-
-    public boolean isGameInitialized() {
-        return mGameInitialized;
-    }
-
-    public void setGameInitialized(boolean gameInitialized) {
-        mGameInitialized = gameInitialized;
-    }
-
-    public boolean isPlaying() {
-        return mPlaying;
-    }
-
-    public void setPlaying(boolean playing) {
-        mPlaying = playing;
     }
 
     public GraphicsContext getGraphicsContext() {
@@ -254,7 +259,12 @@ public class Game {
     }
 
     public void incrementScore() {
-        mScore++;
+        mScore += getLevel();
+        mRedCar.incrementNumberOfCarsOvertaken();
+        if (mRedCar.getNumberOfCarsOvertaken() == mNPCCars.size()) {
+            mRedCar.resetNumberOfCarsOvertaken();
+            incrementLevel();
+        }
     }
 
     public void setMenuContext(GraphicsContext context) {
@@ -268,13 +278,13 @@ public class Game {
 
     private void showMenu() {
         switch (getState()) {
-            case PLAYING:
+            case IDLE:
                 Util.fillStrokeText(getApplication(), getMenuContext(), "HUBBM-RACER", 70, 400, 3, 84);
                 Util.fillStrokeText(getApplication(), getMenuContext(), "Press ENTER to start", 120, 440, 1, 36);
                 break;
             case PAUSED:
-                Util.fillStrokeText(getApplication(), getMenuContext(), "PAUSED", 70, 400, 3, 84);
-                Util.fillStrokeText(getApplication(), getMenuContext(), "Press ESC to continue", 120, 440, 1, 36);
+                Util.fillStrokeText(getApplication(), getMenuContext(), "PAUSED", 180, 400, 3, 84);
+                Util.fillStrokeText(getApplication(), getMenuContext(), "Press ESC to continue", 110, 440, 1, 36);
                 break;
             case LOST:
                 Util.fillStrokeText(getApplication(), getMenuContext(), "GAME OVER", 120, 400, 3, 84);
@@ -304,6 +314,23 @@ public class Game {
     }
 
     public void setState(GameState state) {
-        mState = state;
+         mState = state;
+    }
+
+    public int getLevel() {
+        return mLevel;
+    }
+
+    public void incrementLevel() {
+        mLevel++;
+        for (Sprite sprite: mSprites) {
+            if (sprite instanceof Road || (sprite instanceof Car && !(sprite instanceof RedCar))) {
+                sprite.getVelocity().addY(1);
+            }
+        }
+    }
+
+    public void setLevel(int level) {
+        mLevel = level;
     }
 }

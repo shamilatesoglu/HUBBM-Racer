@@ -15,29 +15,16 @@ public class CarNavigation {
         mRightPressed = false;
     }
 
-    private Vector2D getVerticalVelocity() {
-        Vector2D velocity = new Vector2D(0, 0);
-        if (isUpPressed())
-            velocity.addY(-10);
-
-        if (isDownPressed())
-            velocity.addY(10);
-
-        return velocity;
-    }
-
-    private Vector2D getHorizontalVelocity() {
+    public Vector2D getVelocity() {
         Vector2D velocity = new Vector2D(0, 0);
         if (isLeftPressed())
-            velocity.addX(-7);
+            velocity.addX(-8);
         if (isRightPressed())
-            velocity.addX(7);
-        return velocity;
-    }
-
-    public Vector2D getVelocity() {
-        Vector2D velocity = getVerticalVelocity();
-        velocity.add(getHorizontalVelocity());
+            velocity.addX(8);
+        if (isUpPressed())
+            velocity.addY(-10);
+        if (isDownPressed())
+            velocity.addY(10);
         return velocity;
     }
 

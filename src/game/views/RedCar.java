@@ -7,16 +7,17 @@ import util.Constants;
 public class RedCar extends Car {
 
     private CarNavigation mCarNavigation;
+    private int mNumberOfCarsOvertaken;
 
     public RedCar(String url, Vector2D position) {
         super(url, position);
         mCarNavigation = new CarNavigation();
+        mNumberOfCarsOvertaken = 0;
     }
 
     @Override
     public void update() {
         getPosition().add(getCarNavigation().getVelocity());
-        //getPosition().add(getVelocity());
         boundaryCheck();
     }
 
@@ -24,26 +25,38 @@ public class RedCar extends Car {
         checkPosition();
     }
 
-    private void checkVelocity() {
-        if (getVelocity().getX() > 5) getVelocity().setX(5);
-        if (getVelocity().getX() < -5) getVelocity().setX(-5);
-        if (getVelocity().getY() > 5) getVelocity().setY(5);
-        if (getVelocity().getY() < -5) getVelocity().setY(-5);
-    }
+    //private void checkVelocity() {
+    //    if (getVelocity().getX() > 5) getVelocity().setX(5);
+    //    if (getVelocity().getX() < -5) getVelocity().setX(-5);
+    //    if (getVelocity().getY() > 5) getVelocity().setY(5);
+    //    if (getVelocity().getY() < -5) getVelocity().setY(-5);
+    //}
 
     private void checkPosition() {
-        checkVelocity();
+        //checkVelocity();
         if (getPosition().getY() < 0) getPosition().setY(0);
         if (getPosition().getY() > Constants.SCREEN_HEIGHT - getHeight())
             getPosition().setY(Constants.SCREEN_HEIGHT - getHeight());
 
-        if (getPosition().getX() < 140) getPosition().setX(140);
-        if (getPosition().getX() > Constants.SCREEN_WIDTH - getWidth() - 140)
-            getPosition().setX(Constants.SCREEN_WIDTH - getWidth() - 140);
+        if (getPosition().getX() < 135) getPosition().setX(135);
+        if (getPosition().getX() > Constants.SCREEN_WIDTH - getWidth() - 135)
+            getPosition().setX(Constants.SCREEN_WIDTH - getWidth() - 135);
     }
 
     public CarNavigation getCarNavigation() {
         return mCarNavigation;
+    }
+
+    public void incrementNumberOfCarsOvertaken() {
+        mNumberOfCarsOvertaken++;
+    }
+
+    public int getNumberOfCarsOvertaken() {
+        return mNumberOfCarsOvertaken;
+    }
+
+    public void resetNumberOfCarsOvertaken() {
+        mNumberOfCarsOvertaken = 0;
     }
 
 }
