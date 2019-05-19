@@ -15,17 +15,17 @@ public class CarNavigation {
         mRightPressed = false;
     }
 
-    public Vector2D getVelocity() {
-        Vector2D velocity = new Vector2D(0, 0);
+    public Vector2D getAcceleration() {
+        Vector2D acceleration = new Vector2D(0, 0);
         if (isLeftPressed())
-            velocity.addX(-8);
+            acceleration.setX(-2);
         if (isRightPressed())
-            velocity.addX(8);
+            acceleration.setX(2);
         if (isUpPressed())
-            velocity.addY(-10);
+            acceleration.setY(-3.25);
         if (isDownPressed())
-            velocity.addY(10);
-        return velocity;
+            acceleration.setY(3.25);
+        return acceleration;
     }
 
     public boolean isUpPressed() {
@@ -58,5 +58,13 @@ public class CarNavigation {
 
     public void setRightPressed(boolean rightPressed) {
         mRightPressed = rightPressed;
+    }
+
+    public boolean hasHorizontalPress() {
+        return isLeftPressed() || isRightPressed();
+    }
+
+    public boolean hasVerticalPress() {
+        return isUpPressed() || isDownPressed();
     }
 }

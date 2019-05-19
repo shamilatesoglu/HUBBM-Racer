@@ -13,7 +13,7 @@ public class Road extends Sprite {
     public void update() {
         getPosition().add(getVelocity());
         if (getPosition().getY() > Constants.SCREEN_HEIGHT) {
-            getPosition().setY(-Constants.SCREEN_HEIGHT /*+ getVelocity().getY() */+ (getPosition().getY() - Constants.SCREEN_HEIGHT));
+            getPosition().setY(-Constants.SCREEN_HEIGHT + (getPosition().getY() - Constants.SCREEN_HEIGHT));
         }
     }
 }

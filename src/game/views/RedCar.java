@@ -17,7 +17,8 @@ public class RedCar extends Car {
 
     @Override
     public void update() {
-        getPosition().add(getCarNavigation().getVelocity());
+        getVelocity().add(getCarNavigation().getAcceleration());
+        getPosition().add(getVelocity());
         boundaryCheck();
     }
 
@@ -25,15 +26,27 @@ public class RedCar extends Car {
         checkPosition();
     }
 
-    //private void checkVelocity() {
-    //    if (getVelocity().getX() > 5) getVelocity().setX(5);
-    //    if (getVelocity().getX() < -5) getVelocity().setX(-5);
-    //    if (getVelocity().getY() > 5) getVelocity().setY(5);
-    //    if (getVelocity().getY() < -5) getVelocity().setY(-5);
-    //}
+    private void checkVelocity() {
+        if (getCarNavigation().hasHorizontalPress()) {
+            if (getVelocity().getX() > 8) getVelocity().setX(8);
+            if (getVelocity().getX() < -8) getVelocity().setX(-8);
+        } else {
+            if (getVelocity().getX() > 0) getVelocity().addX(-1);
+            if (getVelocity().getX() < 0) getVelocity().addX(1);
+        }
+
+
+        if (getCarNavigation().hasVerticalPress()) {
+            if (getVelocity().getY() > 10) getVelocity().setY(10);
+            if (getVelocity().getY() < -10) getVelocity().setY(-10);
+        } else {
+            if (getVelocity().getY() > 0) getVelocity().addY(-1);
+            if (getVelocity().getY() < 0) getVelocity().addY(1);
+        }
+    }
 
     private void checkPosition() {
-        //checkVelocity();
+        checkVelocity();
         if (getPosition().getY() < 0) getPosition().setY(0);
         if (getPosition().getY() > Constants.SCREEN_HEIGHT - getHeight())
             getPosition().setY(Constants.SCREEN_HEIGHT - getHeight());
