@@ -1,5 +1,7 @@
 package game;
 
+import game.resources.AudioPlayer;
+import game.resources.ResourceManager;
 import game.views.Car;
 import game.views.RedCar;
 import game.views.Road;
@@ -9,15 +11,12 @@ import javafx.application.Application;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import physics.Vector2D;
-import util.Constants;
 import util.Util;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+
+import static util.Constants.*;
 
 public class Game {
 
@@ -40,8 +39,6 @@ public class Game {
     private int mScore;
     private int mLevel = 1;
 
-    private AnimationTimer mAnimationTimer;
-
     public Game(Application application, Scene gameScene) {
         mApplication = application;
         mGameScene = gameScene;
@@ -51,25 +48,19 @@ public class Game {
         initPrimaryCar();
         initEventHandlers();
         initOtherCars();
-        mState = GameState.IDLE;
-    }
-
-    private void initSounds() {
-        Media media = new Media(Util.getResourceURL(getApplication(), "game_theme.ogg"));
-        MediaPlayer mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.play();
+        setState(GameState.IDLE);
     }
 
     private void initRoad() {
-        Road road1 = new Road(Util.getResourceURL(getApplication(), "road.png"), new Vector2D(0, 0));
-        Road road2 = new Road(Util.getResourceURL(getApplication(), "road.png"), new Vector2D(0, Constants.SCREEN_HEIGHT));
+        Road road1 = new Road(new Vector2D(0, 0));
+        Road road2 = new Road(new Vector2D(0, SCREEN_HEIGHT));
 
         mSprites.add(road1);
         mSprites.add(road2);
     }
 
     private void initPrimaryCar() {
-        mRedCar = new RedCar(Util.getResourceURL(getApplication(), "car.png"), new Vector2D(350, 650));
+        mRedCar = new RedCar(new Vector2D(350, 650));
         mSprites.add(mRedCar);
     }
 
@@ -128,13 +119,13 @@ public class Game {
         carRects.add(new Rectangle2D(mRedCar.getPosition().getX(), mRedCar.getPosition().getY(), mRedCar.getWidth(), mRedCar.getHeight()));
 
         int limit = 100;
-        while (carRects.size() <= 3 && limit-- > 0) {
+        while (carRects.size() <= MAX_VISIBLE_NUMBER_OF_CARS && limit-- > 0) {
 
-            int posX = Util.getRandomInt(150, Constants.SCREEN_WIDTH - 78 - 300);
-            int posY = Util.getRandomInt(-Constants.SCREEN_HEIGHT, Constants.SCREEN_HEIGHT - 128);
+            int posX = Util.getRandomInt(150, SCREEN_WIDTH - 78 - 300);
+            int posY = Util.getRandomInt(-SCREEN_HEIGHT, SCREEN_HEIGHT - 128);
 
             Vector2D position = new Vector2D(posX, posY);
-            Car car = new Car(Util.getResourceURL(getApplication(), "car_yellow.png"), position);
+            Car car = new Car(position);
             Rectangle2D carRect = new Rectangle2D(posX, posY, car.getWidth(), car.getHeight());
 
             boolean intersects = false;
@@ -198,13 +189,14 @@ public class Game {
                             setNewPositionForCar(car);
                         }
                         if (!car.hasAlreadyFallenBehind() && car.isBehind(mRedCar)) {
-                            car.setImage(Util.getImage(getApplication(), "car_green.png"));
+                            car.setImage(ResourceManager.getInstance().getImage("car-green"));
                             incrementScore();
                             car.setHasAlreadyFallenBehind(true);
                         }
                         if (mRedCar.intersects(car)) {
-                            mRedCar.setImage(Util.getImage(getApplication(), "car_totaled.png"));
-                            car.setImage(Util.getImage(getApplication(), "car_totaled.png"));
+                            getAudio("car-crash").play();
+                            mRedCar.setImage(ResourceManager.getInstance().getImage("car-totaled"));
+                            car.setImage(ResourceManager.getInstance().getImage("car-totaled"));
                             setState(GameState.LOST);
                         }
                     }
@@ -216,13 +208,13 @@ public class Game {
     }
 
     private void setNewPositionForCar(Car car) {
-        car.setImage(Util.getImage(getApplication(), "car_yellow.png"));
+        car.setImage(ResourceManager.getInstance().getImage("car-yellow"));
         boolean intersects = true;
         int limit = 100;
 
         while (intersects && limit-- > 0) {
-            int newPosX = Util.getRandomInt(150, Constants.SCREEN_WIDTH - 78 - 300);
-            int newPosY = Util.getRandomInt(-Constants.SCREEN_HEIGHT, Constants.SCREEN_HEIGHT - 128);
+            int newPosX = Util.getRandomInt(150, SCREEN_WIDTH - 78 - 300);
+            int newPosY = Util.getRandomInt(-SCREEN_HEIGHT, SCREEN_HEIGHT - 128);
             Vector2D newPos = new Vector2D(newPosX, newPosY);
             car.setPosition(newPos);
             intersects = false;
@@ -272,8 +264,8 @@ public class Game {
     }
 
     public void clearScr() {
-        mMenuContext.clearRect(0, 0, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
-        mGraphicsContext.clearRect(0, 0, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
+        mMenuContext.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+        mGraphicsContext.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     }
 
     private void showMenu() {
@@ -304,17 +296,27 @@ public class Game {
         return mMenuContext;
     }
 
-    public void setAnimationTimer(AnimationTimer animationTimer) {
-        mAnimationTimer = animationTimer;
-        mAnimationTimer.start();
-    }
-
     public GameState getState() {
         return mState;
     }
 
     public void setState(GameState state) {
-         mState = state;
+        mState = state;
+        switch (mState) {
+            case IDLE:
+                getAudio("menu-theme").play();
+                break;
+            case PLAYING:
+                getAudio("car-crash").stop();
+                getAudio("game-over").stop();
+                getAudio("menu-theme").stop();
+                if (!getAudio("game-theme-2").isPlaying()) getAudio("game-theme").play();
+                break;
+            case LOST:
+                getAudio("game-theme").stop();
+                break;
+        }
+
     }
 
     public int getLevel() {
@@ -323,14 +325,16 @@ public class Game {
 
     public void incrementLevel() {
         mLevel++;
-        for (Sprite sprite: mSprites) {
-            if (sprite instanceof Road || (sprite instanceof Car && !(sprite instanceof RedCar))) {
-                sprite.getVelocity().addY(1);
-            }
-        }
+        mSprites.stream()
+                .filter(sprite -> sprite instanceof Road || (sprite instanceof Car && !(sprite instanceof RedCar)))
+                .forEach(sprite -> sprite.getVelocity().addY(1));
     }
 
     public void setLevel(int level) {
         mLevel = level;
+    }
+
+    private AudioPlayer getAudio(String name) {
+        return ResourceManager.getInstance().getAudio(name);
     }
 }

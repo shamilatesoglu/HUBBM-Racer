@@ -1,4 +1,5 @@
 import game.Game;
+import game.resources.ResourceManager;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Group;
@@ -10,7 +11,6 @@ import javafx.stage.Stage;
 import util.Constants;
 import util.Util;
 
-import java.util.Date;
 import java.util.concurrent.atomic.AtomicLong;
 
 
@@ -18,7 +18,6 @@ public class Assignment4 extends Application {
 
     private Game mGame;
     private Scene mGameScene;
-    private AnimationTimer mAnimationTimer;
     private Application mApplication;
 
     public static void main(String[] args) {
@@ -31,13 +30,14 @@ public class Assignment4 extends Application {
         Group root = new Group();
         mGameScene = new Scene(root);
         mApplication = this;
+        ResourceManager.getInstance().init(mApplication);
     }
 
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("HUBBM-Racer");
 
-        mGame = new Game(this, getGameScene());
+        mGame = new Game (this, getGameScene());
 
         initGameCanvas();
         initMenuCanvas();
@@ -58,7 +58,7 @@ public class Assignment4 extends Application {
     private void initGameLoop() {
         AtomicLong previousFrameTimestamp = new AtomicLong();
         previousFrameTimestamp.set(System.nanoTime());
-        AnimationTimer animationTimer = new AnimationTimer() {
+        new AnimationTimer() {
             @Override
             public void handle(long now) {
                 getGame().render();
@@ -66,9 +66,7 @@ public class Assignment4 extends Application {
                         String.format("FPS: %.1f", mGame.getFPS(now, previousFrameTimestamp.get())), Constants.SCREEN_WIDTH - 170, 32, 0, 32);
                 previousFrameTimestamp.set(now);
             }
-        };
-        getGame().setAnimationTimer(animationTimer);
-
+        }.start();
     }
 
     private void initEventHandlers() {
@@ -111,9 +109,5 @@ public class Assignment4 extends Application {
 
     private Game getGame() {
         return mGame;
-    }
-
-    public AnimationTimer getAnimationTimer() {
-        return mAnimationTimer;
     }
 }

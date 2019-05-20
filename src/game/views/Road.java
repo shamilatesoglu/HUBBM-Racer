@@ -1,12 +1,12 @@
 package game.views;
 
-import javafx.scene.image.Image;
+import game.resources.ResourceManager;
 import physics.Vector2D;
 import util.Constants;
 
 public class Road extends Sprite {
-    public Road(String url, Vector2D position) {
-        super(new Image(url), position, new Vector2D(0, 10), Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
+    public Road(Vector2D position) {
+        super(ResourceManager.getInstance().getImage("road"), position, new Vector2D(0, 10), Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
     }
 
     @Override

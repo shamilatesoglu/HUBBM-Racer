@@ -1,6 +1,7 @@
 package game.mechanics;
 
 import physics.Vector2D;
+import util.Constants;
 
 public class CarNavigation {
     private boolean mUpPressed;
@@ -18,13 +19,13 @@ public class CarNavigation {
     public Vector2D getAcceleration() {
         Vector2D acceleration = new Vector2D(0, 0);
         if (isLeftPressed())
-            acceleration.setX(-2);
+            acceleration.setX(-Constants.RED_CAR_HORIZONTAL_ACCELERATION);
         if (isRightPressed())
-            acceleration.setX(2);
+            acceleration.setX(Constants.RED_CAR_HORIZONTAL_ACCELERATION);
         if (isUpPressed())
-            acceleration.setY(-3.25);
+            acceleration.setY(-Constants.RED_CAR_VERTICAL_ACCELERATION);
         if (isDownPressed())
-            acceleration.setY(3.25);
+            acceleration.setY(Constants.RED_CAR_VERTICAL_ACCELERATION);
         return acceleration;
     }
 

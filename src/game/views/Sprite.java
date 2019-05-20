@@ -1,6 +1,7 @@
 package game.views;
 
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Node;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import physics.Vector2D;
@@ -65,6 +66,9 @@ public abstract class Sprite {
         mHeight = height;
     }
 
+    public Image getImage() {
+        return mImage;
+    }
 
     public double getWidth() {
         return mWidth;
