@@ -30,7 +30,7 @@ public class Assignment4 extends Application {
         Group root = new Group();
         mGameScene = new Scene(root);
         mApplication = this;
-        ResourceManager.getInstance().init(mApplication);
+        ResourceManager.getInstance().init(this);
     }
 
     @Override

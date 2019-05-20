@@ -44,6 +44,10 @@ public class AudioPlayer {
 
     }
 
+    public Media getAudio() {
+        return mMediaPlayer.getMedia();
+    }
+
     public boolean isPlaying() {
         return mIsPlaying;
     }

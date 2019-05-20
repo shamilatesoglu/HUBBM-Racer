@@ -4,6 +4,7 @@ import game.resources.ResourceManager;
 import javafx.application.Application;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -34,9 +35,5 @@ public final class Util {
         context.setFont(Font.loadFont(Util.getResourceURL(application, "FSEX300.ttf"), size));
         context.fillText(text, x, y);
         context.strokeText(text, x, y);
-    }
-
-    public static void playAudio(String ID) {
-        ResourceManager.getInstance().getAudio(ID).play();
     }
 }

@@ -3,6 +3,7 @@ package game.resources;
 import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import util.Util;
 
 import java.util.HashMap;
@@ -78,5 +79,9 @@ public class ResourceManager {
 
     public String getResourceURL(String filename) {
         return mApplication.getClass().getResource(filename).toExternalForm();
+    }
+
+    public void playAudioIndependently(String ID) {
+        new MediaPlayer(mAudioPlayerMap.get(ID).getAudio()).play();
     }
 }

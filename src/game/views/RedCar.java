@@ -76,7 +76,7 @@ public class RedCar extends Car {
 
     public void incrementNumberOfCarsOvertaken() {
         mNumberOfCarsOvertaken++;
-        Util.playAudio("car-pass");
+        ResourceManager.getInstance().playAudioIndependently("car-pass");
     }
 
     public int getNumberOfCarsOvertaken() {
