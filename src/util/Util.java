@@ -1,11 +1,8 @@
 package util;
 
-import game.resources.ResourceManager;
 import javafx.application.Application;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 

@@ -13,8 +13,16 @@ public class Vector2D {
         return mX;
     }
 
+    public void setX(double x) {
+        mX = x;
+    }
+
     public double getY() {
         return mY;
+    }
+
+    public void setY(double y) {
+        mY = y;
     }
 
     public void addX(double x) {
@@ -28,14 +36,6 @@ public class Vector2D {
     public void add(Vector2D vector) {
         addX(vector.getX());
         addY(vector.getY());
-    }
-
-    public void setX(double x) {
-        mX = x;
-    }
-
-    public void setY(double y) {
-        mY = y;
     }
 
     @Override

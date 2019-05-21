@@ -37,7 +37,7 @@ public class Assignment4 extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("HUBBM-Racer");
 
-        mGame = new Game (this, getGameScene());
+        mGame = new Game(this, getGameScene());
 
         initGameCanvas();
         initMenuCanvas();
@@ -83,7 +83,7 @@ public class Assignment4 extends Application {
                     }
                     break;
                 case ESCAPE:
-                    switch (getGame().getState()){
+                    switch (getGame().getState()) {
                         case PAUSED:
                             getGame().setState(Game.GameState.PLAYING);
                             break;

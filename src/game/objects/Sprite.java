@@ -1,7 +1,6 @@
-package game.views;
+package game.objects;
 
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Node;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import physics.Vector2D;
@@ -53,29 +52,28 @@ public abstract class Sprite {
         mVelocity = velocity;
     }
 
-    public void setImage(Image image) {
-        mImage = image;
-    }
-
-
-    public void setWidth(double width) {
-        mWidth = width;
-    }
-
-    public void setHeight(double height) {
-        mHeight = height;
-    }
-
     public Image getImage() {
         return mImage;
+    }
+
+    public void setImage(Image image) {
+        mImage = image;
     }
 
     public double getWidth() {
         return mWidth;
     }
 
+    public void setWidth(double width) {
+        mWidth = width;
+    }
+
     public double getHeight() {
         return mHeight;
+    }
+
+    public void setHeight(double height) {
+        mHeight = height;
     }
 
     @Override

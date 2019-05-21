@@ -2,7 +2,6 @@ package game.resources;
 
 import javafx.application.Application;
 import javafx.scene.image.Image;
-import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import util.Util;
 
@@ -17,15 +16,15 @@ public class ResourceManager {
     private Map<String, Image> mImageMap;
     private Map<String, AudioPlayer> mAudioPlayerMap;
 
+    private ResourceManager() {
+        mImageMap = new HashMap<>();
+        mAudioPlayerMap = new HashMap<>();
+    }
+
     public static ResourceManager getInstance() {
         if (INSTANCE == null)
             return INSTANCE = new ResourceManager();
         return INSTANCE;
-    }
-
-    private ResourceManager() {
-        mImageMap = new HashMap<>();
-        mAudioPlayerMap = new HashMap<>();
     }
 
     public void init(Application application) {

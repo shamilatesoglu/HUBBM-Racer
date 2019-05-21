@@ -1,11 +1,9 @@
-package game.views;
+package game.objects;
 
-import game.resources.ResourceManager;
 import game.mechanics.CarNavigation;
+import game.resources.ResourceManager;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.media.MediaPlayer;
 import physics.Vector2D;
-import util.Util;
 
 import static util.Constants.*;
 
@@ -13,17 +11,12 @@ public class RedCar extends Car {
 
     private CarNavigation mCarNavigation;
     private int mNumberOfCarsOvertaken;
-    private MediaPlayer mAudioPlayer;
 
 
     public RedCar(Vector2D position) {
-        super(position);
-        setImage(ResourceManager.getInstance().getImage("car-red"));
+        super(ResourceManager.getInstance().getImage("car-red"), position, new Vector2D(0, 0));
         mCarNavigation = new CarNavigation();
         mNumberOfCarsOvertaken = 0;
-        //mAudioPlayer = new MediaPlayer(ResourceManager.getInstance().getMedia("car-pass"));
-        //mAudioPlayer.play();
-       //mAudioPlayer.setOnEndOfMedia(() -> mAudioPlayer.seek(Duration.ZERO));
     }
 
     @Override
@@ -46,6 +39,8 @@ public class RedCar extends Car {
         } else {
             if (getVelocity().getX() > 0) getVelocity().addX(-RED_CAR_RATE_OF_SLOWDOWN);
             if (getVelocity().getX() < 0) getVelocity().addX(RED_CAR_RATE_OF_SLOWDOWN);
+            if (Math.abs(getVelocity().getX() - RED_CAR_RATE_OF_SLOWDOWN) > 0 && Math.abs(getVelocity().getX()) < RED_CAR_RATE_OF_SLOWDOWN)
+                getVelocity().setX(0);
         }
 
         if (getCarNavigation().hasVerticalPress()) {
@@ -56,6 +51,8 @@ public class RedCar extends Car {
         } else {
             if (getVelocity().getY() > 0) getVelocity().addY(-RED_CAR_RATE_OF_SLOWDOWN);
             if (getVelocity().getY() < 0) getVelocity().addY(RED_CAR_RATE_OF_SLOWDOWN);
+            if (Math.abs(getVelocity().getY() - RED_CAR_RATE_OF_SLOWDOWN) > 0 && Math.abs(getVelocity().getY()) < RED_CAR_RATE_OF_SLOWDOWN)
+                getVelocity().setY(0);
         }
     }
 
