@@ -81,6 +81,8 @@ public class ResourceManager {
     }
 
     public void playAudioIndependently(String ID) {
-        new MediaPlayer(mAudioPlayerMap.get(ID).getAudio()).play();
+        MediaPlayer mediaPlayer =   new MediaPlayer(mAudioPlayerMap.get(ID).getAudio());
+        mediaPlayer.setOnEndOfMedia(mediaPlayer::dispose);
+        mediaPlayer.play();
     }
 }
