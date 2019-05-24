@@ -23,13 +23,12 @@ public final class Util {
         return sRandom.nextInt(max) + min;
     }
 
-
     public static void fillStrokeText(Application application, GraphicsContext context, String text, double x, double y, double lineWidth, double size) {
-
         context.setFill(Color.YELLOW);
         context.setStroke(Color.BLACK);
         context.setLineWidth(lineWidth);
-        context.setFont(Font.loadFont(Util.getResourceURL(application, "FSEX300.ttf"), size));
+        if (context.getFont().getSize() != size)
+            context.setFont(Font.loadFont(Util.getResourceURL(application, "FSEX300.ttf"), size));
         context.fillText(text, x, y);
         context.strokeText(text, x, y);
     }
