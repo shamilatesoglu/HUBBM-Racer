@@ -15,10 +15,6 @@ public final class Util {
         return application.getClass().getResource(filename).toExternalForm();
     }
 
-    public static Image getImage(Application application, String filename) {
-        return new Image(application.getClass().getResource(filename).toExternalForm());
-    }
-
     public static int getRandomInt(int min, int max) {
         return sRandom.nextInt(max) + min;
     }

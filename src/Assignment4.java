@@ -83,6 +83,7 @@ public class Assignment4 extends Application {
                     }
                     break;
                 case ESCAPE:
+                case P:
                     switch (getGame().getState()) {
                         case PAUSED:
                             getGame().setState(Game.GameState.PLAYING);
@@ -91,6 +92,7 @@ public class Assignment4 extends Application {
                             getGame().setState(Game.GameState.PAUSED);
                             break;
                     }
+                    break;
             }
         });
     }

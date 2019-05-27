@@ -7,6 +7,7 @@ import javafx.application.Application;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 import physics.Vector2D;
 import util.Util;
 
@@ -109,8 +110,8 @@ public class Game {
         int limit = 100;
         while (carRects.size() <= MAX_VISIBLE_NUMBER_OF_CARS && limit-- > 0) {
 
-            int posX = Util.getRandomInt(150, SCREEN_WIDTH - 78 - 300);
-            int posY = Util.getRandomInt(-SCREEN_HEIGHT, SCREEN_HEIGHT - 128);
+            int posX = Util.getRandomInt(150, SCREEN_WIDTH - CAR_WIDTH - 300);
+            int posY = Util.getRandomInt(-SCREEN_HEIGHT, SCREEN_HEIGHT - CAR_HEIGHT);
 
             Vector2D position = new Vector2D(posX, posY);
             RivalCar car = new RivalCar(position);

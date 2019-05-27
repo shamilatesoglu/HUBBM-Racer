@@ -16,7 +16,7 @@ public final class Constants {
 
     public static final double ROAD_BOUNDS = 135;
 
-    public static final int MAX_VISIBLE_NUMBER_OF_CARS = 3;
+    public static final int MAX_VISIBLE_NUMBER_OF_CARS = 4;
 
     public static final double ROAD_INITIAL_HOR_VEL = 15;
     public static final double RIVAL_CAR_INITIAL_HOR_VEL = 5;
