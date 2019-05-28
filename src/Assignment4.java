@@ -63,7 +63,7 @@ public class Assignment4 extends Application {
             public void handle(long now) {
                 getGame().render();
                 Util.fillStrokeText(mApplication, mGame.getGraphicsContext(),
-                        String.format("FPS: %.1f", mGame.getFPS(now, previousFrameTimestamp.get())), Constants.SCREEN_WIDTH - 170, 32, 0, 32);
+                        String.format("FPS: %.1f", mGame.getFPS(now, previousFrameTimestamp.get())), Constants.SCREEN_WIDTH - 158, 32, 0, 32);
                 previousFrameTimestamp.set(now);
             }
         }.start();
