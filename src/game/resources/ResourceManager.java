@@ -38,11 +38,11 @@ public class ResourceManager {
     }
 
     private void initGraphics() {
-        Image imageRedCar = new Image(Util.getResourceURL(mApplication, "car.png"));
-        Image imageYellowCar = new Image(Util.getResourceURL(mApplication, "car_yellow.png"));
-        Image imageGreenCar = new Image(Util.getResourceURL(mApplication, "car_green.png"));
-        Image imageTotaledCar = new Image(Util.getResourceURL(mApplication, "car_totaled.png"));
-        Image roadImage = new Image(Util.getResourceURL(mApplication, "road.png"));
+        Image imageRedCar = new Image(Util.getResourceURL(mApplication, "resources/graphics/car.png"));
+        Image imageYellowCar = new Image(Util.getResourceURL(mApplication, "resources/graphics/car_yellow.png"));
+        Image imageGreenCar = new Image(Util.getResourceURL(mApplication, "resources/graphics/car_green.png"));
+        Image imageTotaledCar = new Image(Util.getResourceURL(mApplication, "resources/graphics/car_totaled.png"));
+        Image roadImage = new Image(Util.getResourceURL(mApplication, "resources/graphics/road.png"));
         mImageMap.put("car-red", imageRedCar);
         mImageMap.put("car-yellow", imageYellowCar);
         mImageMap.put("car-green", imageGreenCar);
@@ -55,21 +55,21 @@ public class ResourceManager {
     }
 
     private void initAudioPlayers() {
-        mAudioPlayerMap.put("game-theme", new AudioPlayer("game_theme.mp3", () -> {
+        mAudioPlayerMap.put("game-theme", new AudioPlayer("resources/sound/game_theme.mp3", () -> {
             getAudio("game-theme").stop();
             getAudio("game-theme-2").play();
         }));
-        mAudioPlayerMap.put("game-theme-2", new AudioPlayer("game_theme2.mp3", () -> {
+        mAudioPlayerMap.put("game-theme-2", new AudioPlayer("resources/sound/game_theme2.mp3", () -> {
             getAudio("game-theme-2").stop();
             getAudio("game-theme").play();
         }));
-        mAudioPlayerMap.put("menu-theme", new AudioPlayer("menu_theme.mp3", true));
-        mAudioPlayerMap.put("game-over", new AudioPlayer("game_over.mp3", false));
-        mAudioPlayerMap.put("car-crash", new AudioPlayer("car_crash.mp3", () -> {
+        mAudioPlayerMap.put("menu-theme", new AudioPlayer("resources/sound/menu_theme.mp3", true));
+        mAudioPlayerMap.put("game-over", new AudioPlayer("resources/sound/game_over.mp3", false));
+        mAudioPlayerMap.put("car-crash", new AudioPlayer("resources/sound/car_crash.mp3", () -> {
             getAudio("car-crash").stop();
             getAudio("game-over").play();
         }));
-        mAudioPlayerMap.put("car-pass", new AudioPlayer("car_pass.mp3", false));
+        mAudioPlayerMap.put("car-pass", new AudioPlayer("resources/sound/car_pass.mp3", false));
     }
 
     public AudioPlayer getAudio(String name) {

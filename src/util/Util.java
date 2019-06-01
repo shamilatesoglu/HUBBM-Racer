@@ -24,7 +24,7 @@ public final class Util {
         context.setStroke(Color.BLACK);
         context.setLineWidth(lineWidth);
         if (context.getFont().getSize() != size)
-            context.setFont(Font.loadFont(Util.getResourceURL(application, "FSEX300.ttf"), size));
+            context.setFont(Font.loadFont(Util.getResourceURL(application, "resources/fonts/FSEX300.ttf"), size));
         context.fillText(text, x, y);
         context.strokeText(text, x, y);
     }
